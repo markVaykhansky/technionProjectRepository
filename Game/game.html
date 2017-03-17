@@ -1,0 +1,46 @@
+<html>
+<head>
+</head>
+<body>
+	<canvas id="paper" width="1000" height="1000"></canvas>
+	<script src="node_modules/phaser/dist/phaser.js"></script>
+	<script type="text/javascript">
+		var points = [];
+		var exampleSocket = new WebSocket("ws://localhost:2012");
+		
+		var canvas = document.getElementById('paper');
+		var context = canvas.getContext('2d');
+		
+		var drawPoint = function(){
+			if(points.length===0 || points.length===1){
+			return;
+			}
+			 context.lineWidth = 10;
+
+      // set line color
+			context.strokeStyle = '#ff0000';
+			context.beginPath();
+			context.clearRect(0,0,paper.width,paper.height);
+			var point = JSON.parse(points[0]);
+			console.log(Math.floor(point.X));
+			context.moveTo(Math.floor(point.X),Math.floor(point.Y));
+			var length = points.length;
+			for(var i=1;i<length;i++){
+			point = JSON.parse(points[i]);
+				context.lineTo(Math.floor(point.X),Math.floor(point.Y))
+			}
+			context.stroke();
+		}
+		
+		exampleSocket.onmessage = function(event){
+			//console.log(event.data);
+			points.push(event.data);
+			drawPoint();
+		}
+		
+		setInterval(function(){
+			points.splice(0,100);
+		},500);
+	</script>
+</body>
+</html>

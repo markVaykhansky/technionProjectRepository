@@ -1,0 +1,4 @@
+﻿//Implement Owin static file server for serving the webpage files
+//Implement the recording of data to matlab files
+//Add support for legs two (maybe)
+//Decide on game stages (10 stages for recording different behaviours) and implement them

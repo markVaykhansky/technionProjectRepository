@@ -1,0 +1,250 @@
+<html>
+<head>
+
+
+</head>
+<body style="background-color:black">
+
+    <button id="btnStart">Start</button>
+    <button id="btnStop">Stop</button>
+
+    <script type="text/javascript" src="js/phaser.js"></script>
+    <script type="text/javascript" src="js/Queue.js"></script>
+    <script type="text/javascript">
+        var socket = new WebSocket("ws://localhost:2012");
+        var state = 'Initialize';
+        var btnStart = document.getElementById('btnStart');
+        btnStart.onclick = function () {
+            socket.send(JSON.stringify({ Connect: true }));
+        }
+
+        var btnStop = document.getElementById('btnStop');
+        btnStop.onclick = function () {
+            socket.send(JSON.stringify({ Connect: false }));
+        }
+    </script>
+
+    <script type="text/javascript">
+        var game = new Phaser.Game(1600, 1000, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+        var locationsLeft = new Queue();
+        var locationsRight = new Queue();
+        var newstarsRate = 3000;
+        var nextStars;
+        var killStar = function (player, star) {
+            emitter.x = star.x;
+            emitter.y = star.y;
+            emitter.start(true, 2000, null, 4);
+            star.kill();
+        }
+
+        var displayStars = function () {
+            for (var i = 0; i < 20; i++) {
+                //  Create a star inside of the 'stars' group
+                var star = stars.create(i * 70, -Math.random() * 300, 'a' + Math.floor(Math.random() * 10 % 3 + 1));
+                //star.scale.setTo(0.2);
+
+                //  Let gravity do its thing
+                star.body.gravity.y = 200;
+
+                //  This just gives each star a slightly random bounce value
+                star.body.bounce.y = 0.7 + Math.random() * 0.5;
+            }
+        }
+
+        var displayConstStars = function () {
+            for (var i = 0; i < 10; i++) {
+                stars.create(i * 70, Math.random() * 300, 'a' + Math.floor(Math.random() * 10 % 3 + 1));
+            }
+        }
+
+        function preload() {
+            game.load.image('background', 'assets/background4.jpg');
+            game.load.image('sword', 'assets/sword.png');
+            //game.load.image('a1', 'assets/asteroid-icon.png');
+            game.load.image('a1', 'assets/asteroid1.png');
+            game.load.image('a2', 'assets/asteroid2.png');
+            game.load.image('a3', 'assets/asteroid3.png');
+            game.load.image('a4', 'assets/asteroid4.png');
+            game.load.image('a5', 'assets/asteroid5.png');
+            game.load.image('particle', 'assets/particle.png')
+            game.load.image('r1', 'assets/rocket1.png');
+            game.load.image('r2', 'assets/rocket2.png');
+            game.load.image('dot', 'assets/dot.png');
+        }
+        var player;
+        var stars;
+        var left;
+        var right;
+        var instructions;
+        var body = [];
+        var skeleton;
+        var graphics;
+        function create() {
+            //Enable basic physics system for all game
+            game.physics.startSystem(Phaser.Physics.ARCADE);
+            
+            //Add background image
+            var background = game.add.sprite(0, 0, 'background');
+
+
+            //add the ufos group
+            stars = game.add.group();
+
+            //enable physics on the ufos
+            stars.enableBody = true;
+
+            player = game.add.group();
+            player.enableBody = true;
+            left = player.create(game.world.width / 2 - 100, game.world.height - 100, 'r1');
+            right = player.create(game.world.width / 2 + 100, game.world.height - 100, 'r1');
+
+
+            ////This is the user handle
+            //left = game.add.sprite(game.world.width / 2 - 100, game.world.height - 100, 'sword');
+            left.scale.setTo(0.5);
+
+            //enable physics for sword
+            game.physics.arcade.enable(left);
+
+            //Don't let sword go out of game
+            left.body.collideWorldBounds = true;
+
+
+            //right = game.add.sprite(game.world.width / 2 +100, game.world.height - 100, 'sword');
+            right.scale.setTo(0.5);
+
+            //enable physics for sword
+            game.physics.arcade.enable(right);
+
+            //Don't let sword go out of game
+            right.body.collideWorldBounds = true;
+
+            //displayStars();
+            displayConstStars();
+
+            emitter = game.add.emitter(0, 0, 300);
+            emitter.makeParticles('particle');
+            emitter.gravity = 300;
+            emitter.setYSpeed(-400, 400);
+            nextStars = game.time.now;
+
+
+            instructions = game.add.text(10, 10, 'Press start to start game');
+            instructions.fill = 'white';
+
+            skeleton = game.add.group();
+            skeleton.enableBody = true;
+            for (var i = 0; i < 25; i++) {
+                body[i] = skeleton.create(0, 0, 'dot');
+            }
+            
+            
+        }
+
+        //add all joints on message recived
+        //delete all previous circles
+        //draw new circles
+        //var joints = new Queue();
+        var joints = 'undefined';
+        var isSet = false;
+        function update() {
+
+            if ((game.time.now - nextStars) > newstarsRate) {
+                displayStars();
+                nextStars = game.time.now;
+                
+               
+
+            }
+            //Enable collision detection between stars and sword
+            //game.physics.arcade.collide(player, stars);
+            //game.physics.arcade.overlap(player, stars, killStar, null, this);
+            game.physics.arcade.overlap(skeleton, stars, killStar, null, this);
+
+            //if (!joints.isEmpty()) {
+            //    var jointsPoints = joints.dequeue();
+            //    //body.ctx.beginPath();
+                
+               
+            //    for (var i = 0; i < jointsPoints.length; i++) {
+            //        body.circle(jointsPoints[i].X, jointsPoints[i].Y, 30, 'rgb(0,200,0)');
+            //    }
+            //    //body.ctx.closePath();
+            //    //body.ctx.fill();
+            //}
+
+            if (isSet) {
+               
+                
+                for (var i = 0; i < joints.length; i++) {
+                   
+                    body[i].body.position.x = joints[i].X;
+                    body[i].body.position.y = joints[i].Y;
+                }
+                isSet = false;
+
+            }
+
+            ////Stay in place if no new point is set
+            //if (locationsLeft.isEmpty()) {
+            //    left.body.velocity.x = 0;
+            //    left.body.velocity.y = 0;
+            //}
+            //    //There is a new point, move it there
+            //else {
+            //    //Get next location for sword
+            //    var point = locationsLeft.dequeue();
+            //    left.body.position.x = point.X;
+            //    left.body.position.y = point.Y;
+
+            //}
+            //if (locationsRight.isEmpty()) {
+            //    right.body.velocity.x = 0;
+            //    right.body.velocity.y = 0;
+            //} else {
+            //    //Get next location for sword
+            //    var point = locationsRight.dequeue();
+            //    right.body.position.x = point.X;
+            //    right.body.position.y = point.Y;
+
+            //}
+
+
+        }
+
+
+
+
+        socket.onmessage = function (event) {
+            var message = JSON.parse(event.data);
+            switch (message.Type) {
+                case 0:
+                    //if (message.Data.LeftHand) {
+                    //    locationsLeft.enqueue(message.Data);
+                    //} else {
+                    //    locationsRight.enqueue(message.Data);
+                    //}
+                    //break;
+                    //joints.enqueue(message.Data);
+                    joints = message.Data;
+                    isSet = true;
+                    break;
+                case 1:
+                    instructions.text = message.Data;
+                    break;
+            }
+
+
+        }
+
+    </script>
+
+
+
+
+
+
+
+
+</body>
+</html>

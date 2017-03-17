@@ -1,0 +1,71 @@
+<html>
+<head>
+	
+	
+</head>
+<body>
+    <script type="text/javascript" src="js/phaser.js"></script>
+    <script type="text/javascript">
+        var game = new Phaser.Game(1024, 748, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+        var socket = new WebSocket("ws://localhost:2012");
+        var locations = [];
+        function preload() {
+            game.load.image('background', 'assets/background.jpg');
+            game.load.image('sword', 'assets/sword.png');
+        }
+        var stars;
+        var sword;
+        function create() {
+            //Enable basic physics system for all game
+            game.physics.startSystem(Phaser.Physics.ARCADE);
+
+            //Add background image
+            game.add.sprite(0, 0, 'background');
+
+            //add the ufos group
+            stars = game.add.group();
+
+            //enable physics on the ufos
+            stars.enableBody = true;
+
+            //This is the user handle
+            sword = game.add.sprite(game.world.width/2-20, game.world.height-100, 'sword');
+            sword.scale.setTo(0.1);
+
+            //enable physics for sword
+            game.physics.arcade.enable(sword);
+
+            //Don't let sword go out of game
+            sword.body.collideWorldBounds = true;
+
+
+
+
+        }
+
+        function update() {
+            //Enable collision detection between stars and sword
+            game.physics.arcade.collide(sword, stars);
+
+            //Stay in place if no new point is set
+            if (locations.length === 0) {
+                sword.body.velocity.x = 0;
+                sword.body.velocity.y = 0;
+            }
+                //There is a new point, move it there
+            else {
+                //Get next location for sword
+                var point = JSON.parse(locations.pop());
+                sword.body.locations.x = point.X;
+                sword.body.locations.y = point.Y;
+            }
+
+        }
+
+
+    </script>
+
+
+    
+</body>
+</html>
