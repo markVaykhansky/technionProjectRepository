@@ -1,0 +1,22 @@
+Configurations: 
+App.config: (in KinectServer project)
+* selectionMethod: chosen cue selection method. Selection Methods = { "IGmaxRand5", "IGmax", "Static", "Random" }
+* usePrecalculated: Use pre-calculated PxCU probabilities (default=true)
+* minimumProbabilityToDisplay: Minimum cerinety to display system's beliefe about the user's identity at (default=0.5)
+
+GlobalConfiguration: (.js in GameSite project)
+* sufficientProbability - The minimum probability which the system considers as a successful person identification and stops the process (default=0.9)
+* recordMode: Set this parameter to true when you want to record new participants data samples
+
+If you want to record new user's samples do the following:
+1. In App.config: Set Selection Method to Static
+2. In GlobalConfiguration.js: Set recordMode to true
+
+GameData folder should contain: 
+Samples.txt - raw data file (input vectors) [ numOfSamples x sampleDimension ]
+C.txt - cues for each vector [numOfSamples x 1]
+U.txt - user for each vector [numOfSamples x 1]
+CC.txt - unique cues id's  [ numOfCues x 1 ]
+UU.txt - unique user id's  [ numOfUsers x 1]
+Dict.txt - contain user names associated with the userId's in UU.txt [ numOfUsers x 1]  (the i'th id should belong to the i'th user)
+Precumputed Folder: each file coresponds to probabilities matrix P(x |c_i,u) for each cue c_i. The matrix is of size #unique_users x #instances_of_c_i.

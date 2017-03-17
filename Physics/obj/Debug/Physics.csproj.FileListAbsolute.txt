@@ -1,0 +1,5 @@
+C:\Users\efi\Downloads\Kinect-master\Kinect-master\Physics\bin\Debug\Physics.dll
+C:\Users\efi\Downloads\Kinect-master\Kinect-master\Physics\bin\Debug\Physics.pdb
+C:\Users\efi\Downloads\Kinect-master\Kinect-master\Physics\obj\Debug\Physics.csprojResolveAssemblyReference.cache
+C:\Users\efi\Downloads\Kinect-master\Kinect-master\Physics\obj\Debug\Physics.dll
+C:\Users\efi\Downloads\Kinect-master\Kinect-master\Physics\obj\Debug\Physics.pdb

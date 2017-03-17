@@ -19,7 +19,7 @@
     var newRects = null;
     var radius = 0.25;
     var probText;
-    var porbability = 0.0;
+    var probability = 0.0;
 
     function endStage() {
         var server = Server.GetInstance();
@@ -93,7 +93,7 @@
         var enemiesLeft = GlobalConfiguration.EnemyCount || GlobalConfiguration.movingStarsToWin;
         server.Send({ Type: Server.Protocol.HITS_DATA, Data: JSON.stringify(hittingJoint) });
         if ((nextStarId < enemiesLeft) 
-            || ((porbability < GlobalConfiguration.sufficientProbability) 
+            || ((probability < GlobalConfiguration.sufficientProbability) 
             && (GlobalConfiguration.recordMode === false))
             && (nextStarId < GlobalConfiguration.maxIterations)) {
             text.text = "You got " + nextStarId + " out of " + enemiesLeft;
@@ -105,7 +105,7 @@
     };
 
     function printProb(probabilityData) {
-        porbability = parseFloat(probabilityData.split(':')[1]);
+        probability = parseFloat(probabilityData.split(':')[1]);
         probText.text = "Current guess: " + probabilityData.split(':')[0] + "Probability" + probabilityData.split(':')[1];
     };
 
@@ -149,6 +149,7 @@
         slices = [];
         newSlices = null;
         newRects = null;
+        probability = 0.0;
     }
 
     return {

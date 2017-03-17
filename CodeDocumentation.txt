@@ -1,0 +1,23 @@
+The system is built of a simple http server based on node.js that exchanges massages with the backend server.
+The client side recognized when a collision between the user and the cues thrown on the screen occurs and sends a massage (of type HIT_DATA) to the backend server. 
+The backend processes the data and responds with an appropriate cue to throw next. 
+
+ When HIT_DATA massage is received in the backend the following procedure happens:
+•	Deserialization of the data from the client.
+•	Extract the recorded frame’s indexes t1 & t2 from the received data.
+•	Extract the corresponding recorded frames from the recorded data. 
+•	Normalize the extracted frames w/ respect to the HIP_CENTER_JOINT. That is a simple subtraction of the values that co-respond to the HIP_CENTER_JOINT from all other joint’s values. 
+•	Spline Normalization: 
+	Each user response consists from different quantities of frames, our goal here is to normalize the recorded frames so that we can compare them to previously recorded frames.
+	We start with a matrix of size [frame_size x number_of_recorded_frames] where the i’th columns is the i’th recorded vector and the i’th row consist of the values of the
+	i’th index in each recorded vector. We perform a spline normalization on each row and concat all the columns into a single line vector of size [frame_size x average_response_size] 
+•	Update the system’s probability vector 
+•	Select a new cue to show the user according to the chosen selection method
+•	Send a message to the server with the highest probability and the corresponding user
+
+An important side note to understand the flow of the system: 
+The procedure described above happens when HIT_DATA massage is received by _server_NewMessageReceived in KineckServerBL.
+When the next cue is calculated it is set through setNextCue method exposed by the KinectBL instance.
+When a new frame from the Kinect arrives the function _bodyFrameReader_newFrameArrived in KinectBL is called.
+_bodyFrameReader_newFrameArrived triggers an event called NewJointsDataReady, which _kinect_NewJoinDataReady in KinecktServerBL is subscribed to.
+Then _kinect_NewJointDataReady sends a message to the client side with the selected cue configuration. 

@@ -1,0 +1,7 @@
+C:\Users\efi\Downloads\Kinect-master\Kinect-master\MatlabDriver\bin\Debug\csmatio.dll
+C:\Users\efi\Downloads\Kinect-master\Kinect-master\MatlabDriver\bin\Debug\csmatio.pdb
+C:\Users\efi\Downloads\Kinect-master\Kinect-master\MatlabDriver\bin\Debug\csmatio.xml
+C:\Users\efi\Downloads\Kinect-master\Kinect-master\MatlabDriver\bin\Debug\zlib.net.dll
+C:\Users\efi\Downloads\Kinect-master\Kinect-master\MatlabDriver\obj\Debug\MatlabBridge.csprojResolveAssemblyReference.cache
+C:\Users\efi\Downloads\Kinect-master\Kinect-master\MatlabDriver\obj\Debug\csmatio.dll
+C:\Users\efi\Downloads\Kinect-master\Kinect-master\MatlabDriver\obj\Debug\csmatio.pdb

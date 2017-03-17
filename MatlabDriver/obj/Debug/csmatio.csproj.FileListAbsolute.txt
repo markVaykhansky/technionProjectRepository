@@ -1,0 +1,14 @@
+C:\HHR\CSMatIO\CSMatIO\src\bin\Debug\csmatio.dll
+C:\HHR\CSMatIO\CSMatIO\src\bin\Debug\csmatio.pdb
+C:\HHR\CSMatIO\CSMatIO\src\bin\Debug\csmatio.xml
+C:\HHR\CSMatIO\CSMatIO\src\bin\Debug\zlib.net.dll
+C:\HHR\CSMatIO\CSMatIO\src\obj\Debug\ResolveAssemblyReference.cache
+C:\HHR\CSMatIO\CSMatIO\src\obj\Debug\csmatio.dll
+C:\HHR\CSMatIO\CSMatIO\src\obj\Debug\csmatio.pdb
+H:\Kinect\Tests\TestingKinect\MatlabDriver\bin\Debug\csmatio.dll
+H:\Kinect\Tests\TestingKinect\MatlabDriver\bin\Debug\csmatio.pdb
+H:\Kinect\Tests\TestingKinect\MatlabDriver\bin\Debug\csmatio.xml
+H:\Kinect\Tests\TestingKinect\MatlabDriver\bin\Debug\zlib.net.dll
+H:\Kinect\Tests\TestingKinect\MatlabDriver\obj\Debug\csmatio.csprojResolveAssemblyReference.cache
+H:\Kinect\Tests\TestingKinect\MatlabDriver\obj\Debug\csmatio.dll
+H:\Kinect\Tests\TestingKinect\MatlabDriver\obj\Debug\csmatio.pdb
