@@ -92,12 +92,16 @@
         star.kill();
         var enemiesLeft = GlobalConfiguration.EnemyCount || GlobalConfiguration.movingStarsToWin;
         server.Send({ Type: Server.Protocol.HITS_DATA, Data: JSON.stringify(hittingJoint) });
-        if ((nextStarId < enemiesLeft) 
-            || ((probability < GlobalConfiguration.sufficientProbability) 
-            && (GlobalConfiguration.recordMode === false))
-            && (nextStarId < GlobalConfiguration.maxIterations)) {
-            text.text = "You got " + nextStarId + " out of " + enemiesLeft;
-                game.time.events.add(GlobalConfiguration.movingStarsDelay, getNewStarFromServer);
+        // Continue throwing cues if:
+        // 1. Recording & not thrown all cues
+        // 2. Not recording & not sufficient certinanty 
+        if (((nextStarId < enemiesLeft) && (GlobalConfiguration.recordMode === true))
+           || ((probability < GlobalConfiguration.sufficientProbability) && (GlobalConfiguration.recordMode === false))) {
+
+            if (GlobalConfiguration.recordMode === true) {
+                text.text = "You got " + nextStarId + " out of " + enemiesLeft;
+            }
+            game.time.events.add(GlobalConfiguration.movingStarsDelay, getNewStarFromServer);
         } else {
             text.text = "Good! wait for next stage...";
             endStage();
